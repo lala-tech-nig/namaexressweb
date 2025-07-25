@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const products = [
-  { id: 1, name: "Jollof Rice", price: 1500 },
-  { id: 2, name: "Suya", price: 1000 },
-  { id: 3, name: "Beans", price: 1200 },
-  { id: 4, name: "Bread", price: 500 },
-  { id: 5, name: "Amala", price: 1000 },
+  { id: 1, name: "FRIED CHICKEN", price: 3000 },
+  { id: 6, name: "FRIED CHICKEN 2", price: 5500 },
+  { id: 2, name: "PEPPER CHICKEN", price: 5000 },
+  { id: 3, name: "RAM SUYA", price: 2500 },
+  { id: 4, name: "CHINESE SUYA", price: 1750 },
+  { id: 5, name: "TOZO AND KIDNEY", price: 1500 },
+  
 ];
 
 export default function POSPage() {
