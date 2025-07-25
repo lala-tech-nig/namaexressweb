@@ -10,7 +10,18 @@ const products = [
   { id: 3, name: "RAM SUYA", price: 2500 },
   { id: 4, name: "CHINESE SUYA", price: 1750 },
   { id: 5, name: "TOZO AND KIDNEY", price: 1500 },
-  
+  { id: 7, name: "CHICKEN SHAWARMA", price: 4000 },
+  { id: 8, name: "ARAB SHAWARMA", price: 6250 },
+  { id: 9, name: "FRIED RICE", price: 2000 },
+  { id: 10, name: "NAMA JOLLOF", price: 1500 },
+  { id: 11, name: "FRENCH FRIES", price: 1700 },
+  { id: 12, name: "SWEET POTATO", price: 1250 },
+  { id: 13, name: "DODO", price: 1000 },
+  { id: 14, name: "DOYA", price: 2000 },
+  { id: 15, name: "CUP CAKES", price: 2500 },
+  { id: 16, name: "APPLE PIE", price: 2500 },
+  { id: 17, name: "ICE CREAM", price: 1500 },
+  { id: 18, name: "YOGHURT", price: 1000 },
 ];
 
 export default function POSPage() {
