@@ -1,3 +1,5 @@
+// app/checkout/page.js
+
 "use client";
 import { Suspense } from "react";
 import CheckoutPage from "./CheckoutPage";
@@ -5,6 +7,7 @@ import CheckoutPage from "./CheckoutPage";
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading checkout...</div>}>
+
       <CheckoutPage />
     </Suspense>
   );
