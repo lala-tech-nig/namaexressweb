@@ -6,6 +6,8 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// app/layout.js
+
 export const metadata = {
   title: "POS Sales App",
   description: "A simple POS sales system",
