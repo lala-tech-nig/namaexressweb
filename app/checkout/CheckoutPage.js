@@ -79,14 +79,6 @@ export default function CheckoutPage() {
         </span>
       </div>
 
-      {/* Back Button */}
-      <button
-        className="absolute top-6 left-4 z-20 bg-yellow-200 text-yellow-900 px-3 py-1 rounded-full shadow hover:bg-yellow-300 transition-all text-sm font-semibold flex items-center gap-1"
-        onClick={backToPOS}
-      >
-        ← Back
-      </button>
-
       {/* Order Items */}
       <div className="flex-1 overflow-y-auto px-2 pb-32">
         {Object.values(order).length === 0 ? (
