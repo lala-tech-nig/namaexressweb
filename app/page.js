@@ -1,4 +1,4 @@
-// pages/index.js
+// app/page.js
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ const products = [
   { id: 5, name: "Amala", price: 1000 },
 ];
 
-export default function Home() {
+export default function POSPage() {
   const [selected, setSelected] = useState({});
   const router = useRouter();
 
@@ -27,20 +27,20 @@ export default function Home() {
 
   const clearItem = (id) => {
     setSelected((prev) => {
-      const newSelected = { ...prev };
-      delete newSelected[id];
-      return newSelected;
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
     });
   };
 
   return (
-    <div className="w-screen h-screen p-4 flex flex-col">
-      <h1 className="text-2xl font-bold mb-4">Point of Sale</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 flex-1 overflow-auto">
+    <div className="w-full h-full flex flex-col p-4">
+      <h1 className="text-3xl font-bold mb-4">POS System</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 flex-1 overflow-y-auto">
         {products.map((product) => (
           <div
             key={product.id}
-            className="p-4 border rounded-lg shadow cursor-pointer relative"
+            className="relative p-4 border rounded shadow hover:bg-gray-50 cursor-pointer"
             onClick={() => addItem(product)}
             onContextMenu={(e) => {
               e.preventDefault();
@@ -48,11 +48,9 @@ export default function Home() {
             }}
           >
             <p className="text-lg font-semibold">{product.name}</p>
-            <p className="text-sm text-gray-600">
-              ₦{product.price.toLocaleString()}
-            </p>
+            <p className="text-sm text-gray-500">₦{product.price}</p>
             {selected[product.id] && (
-              <span className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+              <span className="absolute top-2 right-2 bg-red-600 text-white text-sm w-6 h-6 flex items-center justify-center rounded-full">
                 {selected[product.id].quantity}
               </span>
             )}
@@ -60,10 +58,10 @@ export default function Home() {
         ))}
       </div>
       <button
-        className="mt-4 bg-green-600 text-white p-4 rounded text-xl"
+        className="mt-4 bg-green-700 text-white py-3 rounded text-xl"
         onClick={() => router.push("/checkout?data=" + encodeURIComponent(JSON.stringify(selected)))}
       >
-        Proceed to Checkout
+        Checkout
       </button>
     </div>
   );
