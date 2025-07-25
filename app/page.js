@@ -1,7 +1,7 @@
 // app/page.js
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const products = [
 	{ id: 1, name: "FRIED CHICKEN", price: 3000 },
@@ -25,8 +25,25 @@ const products = [
 ];
 
 export default function POSPage() {
-	const [selected, setSelected] = useState({});
+	const searchParams = useSearchParams();
 	const router = useRouter();
+
+	const [selected, setSelected] = useState({});
+
+	// Restore selected products from query param on mount
+	useEffect(() => {
+		const rawData = searchParams.get("data");
+		if (rawData) {
+			try {
+				const parsed = JSON.parse(rawData);
+				if (parsed && typeof parsed === "object") {
+					setSelected(parsed);
+				}
+			} catch (e) {
+				// Ignore parse errors
+			}
+		}
+	}, [searchParams]);
 
 	const addItem = (product) => {
 		setSelected((prev) => ({
@@ -103,17 +120,35 @@ export default function POSPage() {
 				</div>
 			</div>
 			<div className="fixed bottom-0 left-0 w-full z-[100] px-0 pb-0 bg-white/70 backdrop-blur-lg border-t border-yellow-100">
-				<button
-					className="w-full bg-yellow-300 text-yellow-900 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-yellow-400 hover:text-yellow-900 animate-bounce"
-					onClick={() =>
-						router.push(
-							"/checkout?data=" +
-								encodeURIComponent(JSON.stringify(selected))
-						)
-					}
-				>
-					Checkout
-				</button>
+				<div className="flex gap-2 px-4 py-2">
+					<button
+						className={`flex-1 bg-yellow-300 text-yellow-900 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-yellow-400 hover:text-yellow-900 animate-bounce ${
+							Object.keys(selected).length === 0
+								? "opacity-50 cursor-not-allowed"
+								: ""
+						}`}
+						onClick={() =>
+							router.push(
+								"/checkout?data=" +
+									encodeURIComponent(JSON.stringify(selected))
+							)
+						}
+						disabled={Object.keys(selected).length === 0}
+					>
+						Checkout
+					</button>
+					<button
+						className={`flex-1 bg-red-100 text-red-700 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-red-200 hover:text-red-900 ${
+							Object.keys(selected).length === 0
+								? "opacity-50 cursor-not-allowed"
+								: ""
+						}`}
+						onClick={() => setSelected({})}
+						disabled={Object.keys(selected).length === 0}
+					>
+						Clear All
+					</button>
+				</div>
 			</div>
 			{/* Animations */}
 			<style jsx>{`

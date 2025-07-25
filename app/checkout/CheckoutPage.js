@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function getProductIcon(name) {
   if (name.includes("CHICKEN")) return "🍗";
@@ -22,6 +23,7 @@ function getProductIcon(name) {
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [order, setOrder] = useState({});
 
   useEffect(() => {
@@ -60,6 +62,18 @@ export default function CheckoutPage() {
           Nama Express
         </span>
       </div>
+      {/* Back Button */}
+      <button
+        className="absolute top-6 left-4 z-[101] bg-yellow-200 text-yellow-900 px-3 py-1 rounded-full shadow hover:bg-yellow-300 transition-all duration-200 flex items-center gap-2"
+        onClick={() =>
+          router.push(
+            "/?data=" + encodeURIComponent(JSON.stringify(order))
+          )
+        }
+      >
+        <span className="text-lg">←</span>
+        <span className="text-sm font-semibold">Back</span>
+      </button>
       <div className="flex-1 overflow-y-auto px-2 pb-32">
         {Object.values(order).length === 0 ? (
           <div className="text-center text-yellow-700 mt-16 text-lg animate-fade-in">
@@ -103,16 +117,31 @@ export default function CheckoutPage() {
         )}
       </div>
       <div className="fixed bottom-0 left-0 w-full z-[100] px-0 pb-0 bg-white/70 backdrop-blur-lg border-t border-yellow-100">
-        <div className="flex flex-col items-end px-4 pt-2">
+        <div className="flex flex-col px-4 pt-2">
           <div className="text-xl font-bold text-yellow-900 mb-2">
             Total: ₦{total.toLocaleString()}
           </div>
-          <button
-            className="w-full bg-yellow-300 text-yellow-900 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-yellow-400 hover:text-yellow-900 animate-bounce"
-            onClick={confirmAndPrint}
-          >
-            Confirm & Print
-          </button>
+          <div className="flex gap-2">
+            <button
+              className="flex-[2] bg-yellow-300 text-yellow-900 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-yellow-400 hover:text-yellow-900 animate-bounce"
+              onClick={confirmAndPrint}
+              disabled={Object.values(order).length === 0}
+            >
+              Confirm & Print
+            </button>
+            <button
+              className="flex-1 bg-yellow-200 text-yellow-900 py-5 rounded-none text-lg font-semibold shadow border-0 transition-all duration-200 hover:bg-yellow-300 flex items-center justify-center gap-2"
+              onClick={() =>
+                router.push(
+                  "/?data=" + encodeURIComponent(JSON.stringify(order))
+                )
+              }
+              disabled={Object.values(order).length === 0}
+            >
+              <span className="text-lg">←</span>
+              <span className="text-sm font-semibold">Back</span>
+            </button>
+          </div>
         </div>
       </div>
       <style jsx>{`
