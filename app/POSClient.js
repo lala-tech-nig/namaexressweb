@@ -63,7 +63,7 @@ export default function POSClient() {
 	return (
 		<div className="h-screen w-full flex flex-col bg-black  p-0 relative overflow-hidden">
 			<div className="sticky top-0 z-10 bg-white/40 backdrop-blur-lg shadow-lg rounded-b-3xl px-6 py-4 mb-2 flex items-center justify-between transition-all duration-500">
-				<h1 className="text-3xl font-extrabold text-yellow-800 drop-shadow-lg tracking-wide animate-fade-in">
+				<h1 className="text-3xl font-extrabold text-white drop-shadow-lg tracking-wide animate-fade-in">
 					POS System
 				</h1>
 				<span className="hidden sm:inline-block text-lg font-bold text-yellow-700 bg-yellow-50 px-4 py-2 rounded-xl shadow animate-slide-in">
@@ -88,7 +88,7 @@ export default function POSClient() {
 									{getProductIcon(product.name)}
 								</span>
 								<p
-									className="text-lg font-bold text-yellow-900 group-hover:text-yellow-700 transition-colors duration-300 animate-fade-in"
+									className="text-lg font-bold text-black group-hover:text-yellow-700 transition-colors duration-300 animate-fade-in"
 									style={{
 										fontFamily: "'Poppins', 'Segoe UI', Arial, sans-serif",
 										letterSpacing: "1px",
@@ -97,7 +97,7 @@ export default function POSClient() {
 									{product.name}
 								</p>
 								<p
-									className="text-sm text-yellow-700 mt-2 font-semibold animate-fade-in"
+									className="text-sm text-black mt-2 font-semibold animate-fade-in"
 									style={{
 										fontFamily: "'Poppins', 'Segoe UI', Arial, sans-serif",
 									}}
@@ -133,7 +133,7 @@ export default function POSClient() {
 						Checkout
 					</button>
 					<button
-						className={`flex-1 bg-red-100 text-red-700 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-red-200 hover:text-red-900 ${
+						className={`flex-1 bg-black text-red-700 py-5 rounded-none text-xl font-bold shadow-lg border-0 transition-all duration-300 hover:bg-red-200 hover:text-red-900 ${
 							Object.keys(selected).length === 0
 								? "opacity-50 cursor-not-allowed"
 								: ""
