@@ -75,7 +75,8 @@ export default function POSClient() {
 					{products.map((product) => (
 						<div
 							key={product.id}
-							className="relative p-4 rounded-3xl shadow-xl cursor-pointer bg-white/40 backdrop-blur-lg border border-yellow-200 hover:scale-105 hover:shadow-2xl transition-all duration-300 group"
+							// bg-white/40 backdrop-blur-lg border border-yellow-200
+							className="relative p-4 rounded-3xl shadow-xl cursor-pointer bg-white hover:scale-105 hover:shadow-2xl transition-all duration-300 group"
 							onClick={() => addItem(product)}
 							onContextMenu={(e) => {
 								e.preventDefault();
