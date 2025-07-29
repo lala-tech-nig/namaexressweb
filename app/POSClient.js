@@ -58,8 +58,10 @@ export default function POSClient() {
 		});
 	};
 
+// bg-gradient-to-br from-yellow-100 via-yellow-50 to-white
+
 	return (
-		<div className="h-screen w-full flex flex-col bg-gradient-to-br from-yellow-100 via-yellow-50 to-white p-0 relative overflow-hidden">
+		<div className="h-screen w-full flex flex-col bg-white  p-0 relative overflow-hidden">
 			<div className="sticky top-0 z-10 bg-white/40 backdrop-blur-lg shadow-lg rounded-b-3xl px-6 py-4 mb-2 flex items-center justify-between transition-all duration-500">
 				<h1 className="text-3xl font-extrabold text-yellow-800 drop-shadow-lg tracking-wide animate-fade-in">
 					POS System
