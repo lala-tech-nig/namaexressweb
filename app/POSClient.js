@@ -106,7 +106,7 @@ export default function POSClient() {
 								</p>
 							</div>
 							{selected[product.id] && (
-								<span className="absolute top-3 right-3 bg-yellow-600 text-white text-sm w-7 h-7 flex items-center justify-center rounded-full shadow-lg border-2 border-yellow-300 animate-pop">
+								<span className="absolute top-3 right-3 bg-black text-yellow-600 text-sm w-7 h-7 flex items-center justify-center rounded-full shadow-lg border-2 border-yellow-300 animate-pop">
 									{selected[product.id].quantity}
 								</span>
 							)}
