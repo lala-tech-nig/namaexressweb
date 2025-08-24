@@ -67,7 +67,7 @@ export default function POSClient() {
 					POS System
 				</h1>
 				<span className="hidden sm:inline-block text-lg font-bold text-yellow-700 bg-yellow-50 px-4 py-2 rounded-xl shadow animate-slide-in">
-					Nama Express
+					Nama test Express
 				</span>
 			</div>
 			<div className="flex-1 overflow-y-auto px-2 pb-32">
