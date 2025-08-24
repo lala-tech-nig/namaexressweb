@@ -164,12 +164,17 @@ export default function CheckoutPage() {
             <div className="text-center text-xs mt-4 mb-2 text-yellow-700">
               Thank you for your patronage!
             </div>
-            {/* Modal Close Button */}
+            {/* Print Button */}
             <button
               className="mt-4 bg-yellow-400 text-yellow-900 font-bold py-3 px-8 rounded shadow-lg text-lg hover:bg-yellow-500 transition"
-              onClick={() => setShowPreview(false)}
+              onClick={() => {
+                window.print();
+                setTimeout(() => {
+                  router.push("/");
+                }, 1000);
+              }}
             >
-              Close
+              Print
             </button>
           </div>
         </div>
