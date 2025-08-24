@@ -3,8 +3,6 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import Image from "next/image"; // If you want to use next/image for logo
 
 function getProductIcon(name) {
   if (name.includes("CHICKEN")) return "🍗";
@@ -49,26 +47,9 @@ export default function CheckoutPage() {
     return sum + price * qty;
   }, 0);
 
-  const confirmAndPrint = async () => {
-    try {
-      await axios.post("http://localhost:3001/print-order", {
-        items: Object.values(order),
-        total,
-        timestamp: new Date().toISOString(),
-      });
-      setShowPreview(true); // Show modal instead of navigating
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to print or save the order.");
-    }
-  };
-
-  const handlePrint = () => {
-    window.print();
-    setTimeout(() => {
-      setShowPreview(false);
-      router.push("/");
-    }, 1000);
+  // Only open modal, no backend or print logic
+  const confirmAndPrint = () => {
+    setShowPreview(true);
   };
 
   const backToPOS = () =>
@@ -77,8 +58,8 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-yellow-100 via-yellow-50 to-white relative overflow-hidden">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/40 backdrop-blur-lg shadow-lg rounded-b-3xl px-6 py-4 flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-yellow-800 drop-shadow tracking-wide animate-fade-in">
+      <div className="sticky top-0 z-10 bg-white/60 backdrop-blur-lg shadow-lg rounded-b-3xl px-6 py-4 flex items-center justify-between">
+        <h1 className="text-3xl font-extrabold text-yellow-800 drop-shadow-lg tracking-wide animate-fade-in">
           Checkout
         </h1>
         <span className="hidden sm:inline-block text-lg font-bold text-yellow-700 bg-yellow-50 px-4 py-2 rounded-xl shadow animate-slide-in">
@@ -97,7 +78,7 @@ export default function CheckoutPage() {
             {Object.values(order).map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-4 rounded-2xl shadow bg-white/50 backdrop-blur border border-yellow-100 animate-fade-in"
+                className="flex items-center justify-between p-4 rounded-2xl shadow bg-white/60 backdrop-blur-lg border border-yellow-100 animate-fade-in"
               >
                 <span className="text-3xl mr-4 animate-pop">
                   {getProductIcon(item.name)}
@@ -120,7 +101,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="fixed bottom-0 left-0 w-full z-10 px-4 pb-4 bg-white/70 backdrop-blur-lg border-t border-yellow-100">
+      <div className="fixed bottom-0 left-0 w-full z-10 px-4 pb-4 bg-gradient-to-t from-yellow-100/80 via-yellow-50/60 to-transparent backdrop-blur-lg border-t border-yellow-100">
         <div className="text-xl font-bold text-yellow-900 mb-2">
           Total: ₦{total.toLocaleString()}
         </div>
@@ -151,17 +132,16 @@ export default function CheckoutPage() {
           >
             {/* Logo */}
             <div className="flex flex-col items-center mb-2">
-              {/* Use next/image if you want, or <img src="/logo.png" ... /> */}
               <img
                 src="/logo.png"
                 alt="Logo"
                 className="w-20 h-20 object-contain mb-1"
               />
-              <div className="text-center text-xs font-bold">
+              <div className="text-center text-xs font-bold text-yellow-800">
                 123 Nama Express Street, Lagos, Nigeria
               </div>
             </div>
-            <hr className="my-2 border-dashed border-gray-400" />
+            <hr className="my-2 border-dashed border-yellow-200" />
             {/* Items */}
             <div className="w-full">
               {Object.values(order).map((item) => (
@@ -173,30 +153,23 @@ export default function CheckoutPage() {
                 </div>
               ))}
             </div>
-            <hr className="my-2 border-dashed border-gray-400" />
+            <hr className="my-2 border-dashed border-yellow-200" />
             {/* Total */}
-            <div className="flex justify-between font-bold text-base mb-2 w-full">
+            <div className="flex justify-between font-bold text-base mb-2 w-full text-yellow-900">
               <span>Total</span>
               <span>₦{Number(total).toLocaleString()}</span>
             </div>
-            <hr className="my-2 border-dashed border-gray-400" />
+            <hr className="my-2 border-dashed border-yellow-200" />
             {/* Footer */}
-            <div className="text-center text-xs mt-4 mb-2">
+            <div className="text-center text-xs mt-4 mb-2 text-yellow-700">
               Thank you for your patronage!
             </div>
-            {/* Print Button */}
+            {/* Modal Close Button */}
             <button
-              className="mt-4 bg-yellow-400 text-yellow-900 font-bold py-3 px-8 rounded shadow-lg text-lg hover:bg-yellow-500 transition print:hidden"
-              onClick={handlePrint}
-            >
-              Print Receipt
-            </button>
-            {/* Close button for modal (not shown when printing) */}
-            <button
-              className="mt-2 text-xs text-gray-500 underline print:hidden"
+              className="mt-4 bg-yellow-400 text-yellow-900 font-bold py-3 px-8 rounded shadow-lg text-lg hover:bg-yellow-500 transition"
               onClick={() => setShowPreview(false)}
             >
-              Cancel
+              Close
             </button>
           </div>
         </div>
@@ -204,73 +177,27 @@ export default function CheckoutPage() {
 
       {/* Animation Styles */}
       <style jsx>{`
-        @media print {
-          body > :not(.print-area) {
-            display: none !important;
-          }
-          .print-area {
-            box-shadow: none !important;
-            border: none !important;
-            margin: 0 !important;
-            width: 80mm !important;
-          }
-          button,
-          .mt-2 {
-            display: none !important;
-          }
-        }
         @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px);}
+          to { opacity: 1; transform: translateY(0);}
         }
         @keyframes slide-in {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
+          from { opacity: 0; transform: translateX(30px);}
+          to { opacity: 1; transform: translateX(0);}
         }
         @keyframes pop {
-          0% {
-            transform: scale(0.7);
-          }
-          60% {
-            transform: scale(1.2);
-          }
-          100% {
-            transform: scale(1);
-          }
+          0% { transform: scale(0.7);}
+          60% { transform: scale(1.2);}
+          100% { transform: scale(1);}
         }
         @keyframes bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
+          0%, 100% { transform: translateY(0);}
+          50% { transform: translateY(-5px);}
         }
-        .animate-fade-in {
-          animation: fade-in 0.7s ease;
-        }
-        .animate-slide-in {
-          animation: slide-in 0.7s ease;
-        }
-        .animate-pop {
-          animation: pop 0.4s;
-        }
-        .animate-bounce {
-          animation: bounce 1.2s infinite;
-        }
+        .animate-fade-in { animation: fade-in 0.7s ease;}
+        .animate-slide-in { animation: slide-in 0.7s ease;}
+        .animate-pop { animation: pop 0.4s;}
+        .animate-bounce { animation: bounce 1.2s infinite;}
       `}</style>
     </div>
   );
