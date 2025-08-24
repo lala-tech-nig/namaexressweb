@@ -4,6 +4,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Image from "next/image"; // If you want to use next/image for logo
 
 function getProductIcon(name) {
   if (name.includes("CHICKEN")) return "🍗";
@@ -26,6 +27,7 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [order, setOrder] = useState({});
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const rawData = searchParams.get("data");
@@ -54,14 +56,19 @@ export default function CheckoutPage() {
         total,
         timestamp: new Date().toISOString(),
       });
-
-      alert("✅ Order printed and saved!");
-      await new Promise((res) => setTimeout(res, 1000)); // optional delay
-      router.push("/");
+      setShowPreview(true); // Show modal instead of navigating
     } catch (err) {
       console.error(err);
       alert("❌ Failed to print or save the order.");
     }
+  };
+
+  const handlePrint = () => {
+    window.print();
+    setTimeout(() => {
+      setShowPreview(false);
+      router.push("/");
+    }, 1000);
   };
 
   const backToPOS = () =>
@@ -135,8 +142,83 @@ export default function CheckoutPage() {
         </div>
       </div>
 
+      {/* Print Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div
+            className="bg-white w-[340px] max-w-full rounded-lg shadow-lg p-4 flex flex-col items-center print:w-full print:shadow-none print:rounded-none"
+            style={{ width: "80mm" }}
+          >
+            {/* Logo */}
+            <div className="flex flex-col items-center mb-2">
+              {/* Use next/image if you want, or <img src="/logo.png" ... /> */}
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-20 h-20 object-contain mb-1"
+              />
+              <div className="text-center text-xs font-bold">
+                123 Nama Express Street, Lagos, Nigeria
+              </div>
+            </div>
+            <hr className="my-2 border-dashed border-gray-400" />
+            {/* Items */}
+            <div className="w-full">
+              {Object.values(order).map((item) => (
+                <div key={item.id} className="flex justify-between text-sm mb-1">
+                  <span>
+                    {getProductIcon(item.name)} {item.name} x{item.quantity}
+                  </span>
+                  <span>₦{(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+            <hr className="my-2 border-dashed border-gray-400" />
+            {/* Total */}
+            <div className="flex justify-between font-bold text-base mb-2 w-full">
+              <span>Total</span>
+              <span>₦{Number(total).toLocaleString()}</span>
+            </div>
+            <hr className="my-2 border-dashed border-gray-400" />
+            {/* Footer */}
+            <div className="text-center text-xs mt-4 mb-2">
+              Thank you for your patronage!
+            </div>
+            {/* Print Button */}
+            <button
+              className="mt-4 bg-yellow-400 text-yellow-900 font-bold py-3 px-8 rounded shadow-lg text-lg hover:bg-yellow-500 transition print:hidden"
+              onClick={handlePrint}
+            >
+              Print Receipt
+            </button>
+            {/* Close button for modal (not shown when printing) */}
+            <button
+              className="mt-2 text-xs text-gray-500 underline print:hidden"
+              onClick={() => setShowPreview(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Animation Styles */}
       <style jsx>{`
+        @media print {
+          body > :not(.print-area) {
+            display: none !important;
+          }
+          .print-area {
+            box-shadow: none !important;
+            border: none !important;
+            margin: 0 !important;
+            width: 80mm !important;
+          }
+          button,
+          .mt-2 {
+            display: none !important;
+          }
+        }
         @keyframes fade-in {
           from {
             opacity: 0;
@@ -169,7 +251,8 @@ export default function CheckoutPage() {
           }
         }
         @keyframes bounce {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {
