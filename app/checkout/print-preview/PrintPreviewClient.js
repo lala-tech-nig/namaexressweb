@@ -8,20 +8,22 @@ export default function PrintPreviewClient() {
   const total = searchParams.get("total") || "0";
 
   return (
-    <div className="p-4">
-      <div className="text-center mb-4">
-        <img src="/logo.png" alt="Logo" className="mx-auto w-16 h-16" />
-        <h2 className="text-lg font-bold">Receipt</h2>
-      </div>
-      <ul className="mb-4">
-        {items.map((item, idx) => (
-          <li key={idx}>
-            {item.name} × {item.quantity} = ₦{item.price * item.quantity}
-          </li>
+    <div className="p-6 text-center">
+      <img src="/logo.png" alt="Logo" className="mx-auto w-24 mb-4" />
+      <h1 className="text-lg font-bold mb-4">Receipt</h1>
+
+      <div className="text-left mb-4">
+        {items.map((item, index) => (
+          <div key={index} className="flex justify-between">
+            <span>{item.name}</span>
+            <span>x{item.qty}</span>
+            <span>₦{item.price * item.qty}</span>
+          </div>
         ))}
-      </ul>
-      <div className="font-bold text-right">Total: ₦{total}</div>
-      <div className="text-center mt-6">Thanks for patronizing us!</div>
+      </div>
+
+      <h2 className="font-bold text-xl mt-4">Total: ₦{total}</h2>
+      <p className="mt-6 italic">Thanks for patronizing us!</p>
     </div>
   );
 }
