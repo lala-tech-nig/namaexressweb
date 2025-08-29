@@ -1,5 +1,3 @@
-// app/checkout/CheckoutPage.js
-
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,7 +23,6 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [order, setOrder] = useState({});
-  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const rawData = searchParams.get("data");
@@ -47,9 +44,13 @@ export default function CheckoutPage() {
     return sum + price * qty;
   }, 0);
 
-  // Only open modal, no backend or print logic
+  // ✅ Opens print preview page
   const confirmAndPrint = () => {
-    setShowPreview(true);
+    router.push(
+      `/checkout/print-preview?data=${encodeURIComponent(
+        JSON.stringify(order)
+      )}&total=${encodeURIComponent(total)}`
+    );
   };
 
   const backToPOS = () =>
@@ -122,88 +123,6 @@ export default function CheckoutPage() {
           </button>
         </div>
       </div>
-
-      {/* Print Preview Modal */}
-      {showPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div
-            className="bg-white w-[340px] max-w-full rounded-lg shadow-lg p-4 flex flex-col items-center print:w-full print:shadow-none print:rounded-none"
-            style={{ width: "80mm" }}
-          >
-            {/* Logo */}
-            <div className="flex flex-col items-center mb-2">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className="w-20 h-20 object-contain mb-1"
-              />
-              <div className="text-center text-xs font-bold text-yellow-800">
-                123 Nama Express Street, Lagos, Nigeria
-              </div>
-            </div>
-            <hr className="my-2 border-dashed border-yellow-200" />
-            {/* Items */}
-            <div className="w-full">
-              {Object.values(order).map((item) => (
-                <div key={item.id} className="flex justify-between text-sm mb-1">
-                  <span>
-                    {getProductIcon(item.name)} {item.name} x{item.quantity}
-                  </span>
-                  <span>₦{(item.price * item.quantity).toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-            <hr className="my-2 border-dashed border-yellow-200" />
-            {/* Total */}
-            <div className="flex justify-between font-bold text-base mb-2 w-full text-yellow-900">
-              <span>Total</span>
-              <span>₦{Number(total).toLocaleString()}</span>
-            </div>
-            <hr className="my-2 border-dashed border-yellow-200" />
-            {/* Footer */}
-            <div className="text-center text-xs mt-4 mb-2 text-yellow-700">
-              Thank you for your patronage!
-            </div>
-            {/* Print Button */}
-            <button
-              className="mt-4 bg-yellow-400 text-yellow-900 font-bold py-3 px-8 rounded shadow-lg text-lg hover:bg-yellow-500 transition"
-              onClick={() => {
-                window.print();
-                setTimeout(() => {
-                  router.push("/");
-                }, 1000);
-              }}
-            >
-              Print
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Animation Styles */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px);}
-          to { opacity: 1; transform: translateY(0);}
-        }
-        @keyframes slide-in {
-          from { opacity: 0; transform: translateX(30px);}
-          to { opacity: 1; transform: translateX(0);}
-        }
-        @keyframes pop {
-          0% { transform: scale(0.7);}
-          60% { transform: scale(1.2);}
-          100% { transform: scale(1);}
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0);}
-          50% { transform: translateY(-5px);}
-        }
-        .animate-fade-in { animation: fade-in 0.7s ease;}
-        .animate-slide-in { animation: slide-in 0.7s ease;}
-        .animate-pop { animation: pop 0.4s;}
-        .animate-bounce { animation: bounce 1.2s infinite;}
-      `}</style>
     </div>
   );
 }
